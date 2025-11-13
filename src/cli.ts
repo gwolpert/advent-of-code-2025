@@ -4,8 +4,8 @@ const { red } = chalk;
 import inquirer from "inquirer";
 
 export type CliArgs = Partial<{
-	day: number;
-	part: number;
+	dayIndex: number;
+	partIndex: 1 | 2;
 }>;
 
 /**
@@ -31,16 +31,16 @@ export const getCliArgs = (): CliArgs => {
 			console.error(red("Error: Day must be between 1 and 25"));
 			process.exit(1);
 		}
-		params.day = day;
+		params.dayIndex = day;
 	}
 
 	if (values.part) {
 		const part = parseInt(values.part, 10);
-		if (isNaN(part) || part < 1 || part > 2) {
+		if (isNaN(part) || (part !== 1 && part !== 2)) {
 			console.error(red("Error: Part must be either 1 or 2"));
 			process.exit(1);
 		}
-		params.part = part;
+		params.partIndex = part;
 	}
 
 	return params;
@@ -71,8 +71,8 @@ export const promptForDay = async (): Promise<number> => {
  * Prompt user for parts using inquirer
  * @returns Array of selected part numbers
  */
-export const promptForParts = async (): Promise<number[]> => {
-	const { parts } = await inquirer.prompt<{ parts: number[] }>([
+export const promptForParts = async (): Promise<Array<1 | 2>> => {
+	const { parts } = await inquirer.prompt<{ parts: Array<1 | 2> }>([
 		{
 			type: "checkbox",
 			name: "parts",

@@ -3,6 +3,7 @@ import { join } from "path";
 export type Config = {
 	year: number;
 	baseUrl: string;
+	session: string;
 };
 
 /**
