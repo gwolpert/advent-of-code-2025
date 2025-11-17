@@ -36,7 +36,7 @@ export const getCliArgs = (): CliArgs => {
 
 	if (values.part) {
 		const part = parseInt(values.part, 10);
-		if (isNaN(part) || (part !== 1 && part !== 2)) {
+		if (part !== 1 && part !== 2) {
 			console.error(red("Error: Part must be either 1 or 2"));
 			process.exit(1);
 		}

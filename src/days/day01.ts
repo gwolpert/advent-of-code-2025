@@ -1,12 +1,10 @@
 import type { Day } from "../runner.ts";
 
-const day: Day = {
+export default {
 	1: (input) => {
 		return input.length;
 	},
 	2: (input) => {
-		return input.length;
+		return input.length * 2;
 	},
-};
-
-export default day;
+} satisfies Day;

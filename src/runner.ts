@@ -1,5 +1,5 @@
 import chalk from "chalk";
-const { gray } = chalk;
+const { gray, yellow } = chalk;
 import { createSpinner } from "nanospinner";
 
 export type Part = (input: string) => number;
@@ -33,7 +33,7 @@ export const executePart = async (
 		const answer = part(input);
 		const endTime = performance.now();
 		const microseconds = ((endTime - startTime) * 1000).toFixed(0);
-		const text = `${title} ${gray(`Completed in ${microseconds}µs\nAnswer: `)} ${answer}`;
+		const text = `${title}: ${yellow(answer)} ${gray(`Completed in ${microseconds}µs`)}`;
 		spinner.success({ text });
 		return answer;
 	} catch (error) {
