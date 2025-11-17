@@ -12,7 +12,7 @@ export type Day = Record<1 | 2, Part>;
  */
 export const importDay = async (day: number): Promise<Day> => {
 	const dayStr = day.toString().padStart(2, "0");
-	return (await import(`./days/day${dayStr}.ts`)).default;
+	return (await import(`./days/${dayStr}.ts`)).default;
 };
 
 /**

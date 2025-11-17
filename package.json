@@ -5,6 +5,7 @@
 	"private": true,
 	"scripts": {
 		"start": "bun run src/index.ts",
+		"test": "bun test src/",
 		"fmt": "prettier --write ."
 	},
 	"devDependencies": {

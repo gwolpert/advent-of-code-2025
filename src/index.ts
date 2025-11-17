@@ -1,15 +1,21 @@
 import chalk from "chalk";
 const { cyan, green } = chalk;
-import { getCliArgs, promptForDay, promptForParts } from "./cli";
+import {
+	getCliArgs,
+	promptForDay,
+	promptForParts,
+	handleScaffolding,
+} from "./cli";
 import { fetchDayTitle, fetchInput } from "./aoc";
 import { importDay, executePart } from "./runner";
 import { loadConfig } from "./config.ts";
 
-let { dayIndex, partIndex } = getCliArgs();
+let { dayIndex, partIndex, scaffold } = getCliArgs();
 let { year } = await loadConfig();
 
-// If day or part are not provided, prompt for it
+// When CLI args are missing, prompt the user for them
 dayIndex ??= await promptForDay();
+await handleScaffolding(dayIndex, scaffold);
 const parts = [partIndex ?? (await promptForParts())].flat();
 
 console.log(cyan.bold(`\n🎄 Advent of Code ${year}`));
