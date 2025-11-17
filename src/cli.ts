@@ -1,6 +1,6 @@
 import { parseArgs } from "util";
 import chalk from "chalk";
-const { red, green, yellow } = chalk;
+const { red, green, gray } = chalk;
 import inquirer from "inquirer";
 import { join } from "node:path";
 import { exists } from "node:fs/promises";
@@ -145,7 +145,7 @@ export const handleScaffolding = async (
 	await Bun.write(testPath, testContent);
 
 	spinner.success({
-		text: `Scaffolded Day ${day}\n  ${yellow(`- ${dayPath}`)}\n  ${yellow(`- ${testPath}`)}`,
+		text: `Scaffolded Day ${day}${gray(`\n  - ${dayPath}\n  - ${testPath}`)}`,
 	});
 	process.exit(0);
 };
