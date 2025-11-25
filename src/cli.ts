@@ -5,6 +5,7 @@ import inquirer from "inquirer";
 import { join } from "node:path";
 import { exists } from "node:fs/promises";
 import { createSpinner } from "nanospinner";
+import { DateTime } from "luxon";
 
 export type CliArgs = Partial<{
 	dayIndex: number;
@@ -60,12 +61,13 @@ export const getCliArgs = (): CliArgs => {
  * @returns Selected day number
  */
 export const promptForDay = async (): Promise<number> => {
+	const dayOfMonth = Math.min(DateTime.local().day, 25);
 	const { day } = await inquirer.prompt<{ day: number }>([
 		{
 			type: "number",
 			name: "day",
 			message: "Which day would you like to run?",
-			default: 1,
+			default: dayOfMonth,
 			validate: (input) => {
 				const num = Number(input);
 				if (num >= 1 && num <= 25) return true;
