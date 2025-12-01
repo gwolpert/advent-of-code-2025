@@ -11,8 +11,8 @@ export type Day = Record<1 | 2, Part>;
  * @returns Promise with Day implementation
  */
 export const importDay = async (day: number): Promise<Day> => {
-	const dayStr = day.toString().padStart(2, "0");
-	return (await import(`./days/${dayStr}.ts`)).default;
+  const dayStr = day.toString().padStart(2, "0");
+  return (await import(`./days/${dayStr}.ts`)).default;
 };
 
 /**
@@ -23,25 +23,25 @@ export const importDay = async (day: number): Promise<Day> => {
  * @returns Promise with puzzle answer as number
  */
 export const executePart = async (
-	title: string,
-	part: Part,
-	input: string
+  title: string,
+  part: Part,
+  input: string
 ): Promise<number> => {
-	const spinner = createSpinner(title).start();
-	const startTime = performance.now();
-	try {
-		const answer = part(input);
-		const endTime = performance.now();
-		const microseconds = ((endTime - startTime) * 1000).toFixed(0);
-		const text = `${title}: ${yellow(answer)} ${gray(`Completed in ${microseconds}µs`)}`;
-		spinner.success({ text });
-		return answer;
-	} catch (error) {
-		const endTime = performance.now();
-		const microseconds = ((endTime - startTime) * 1000).toFixed(0);
-		const errorText = error instanceof Error ? error.message : String(error);
-		const text = `${title} ${gray(`Failed after ${microseconds}µs\n${errorText}`)}`;
-		spinner.error({ text });
-		process.exit(1);
-	}
+  const spinner = createSpinner(title).start();
+  const startTime = performance.now();
+  try {
+    const answer = part(input);
+    const endTime = performance.now();
+    const microseconds = ((endTime - startTime) * 1000).toFixed(0);
+    const text = `${title}: ${yellow(answer)} ${gray(`Completed in ${microseconds}µs`)}`;
+    spinner.success({ text });
+    return answer;
+  } catch (error) {
+    const endTime = performance.now();
+    const microseconds = ((endTime - startTime) * 1000).toFixed(0);
+    const errorText = error instanceof Error ? error.message : String(error);
+    const text = `${title} ${gray(`Failed after ${microseconds}µs\n${errorText}`)}`;
+    spinner.error({ text });
+    process.exit(1);
+  }
 };

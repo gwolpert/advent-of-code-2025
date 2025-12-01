@@ -1,10 +1,10 @@
 import chalk from "chalk";
 const { cyan, green } = chalk;
 import {
-	getCliArgs,
-	promptForDay,
-	promptForParts,
-	handleScaffolding,
+  getCliArgs,
+  promptForDay,
+  promptForParts,
+  handleScaffolding,
 } from "./cli";
 import { fetchDayTitle, fetchInput } from "./aoc";
 import { importDay, executePart } from "./runner";
@@ -24,6 +24,6 @@ const dayImplementation = await importDay(dayIndex);
 const input = await fetchInput(dayIndex);
 
 for (const part of parts) {
-	const title = `Part ${part}`;
-	await executePart(title, dayImplementation[part], input);
+  const title = `Part ${part}`;
+  await executePart(title, dayImplementation[part], input);
 }
