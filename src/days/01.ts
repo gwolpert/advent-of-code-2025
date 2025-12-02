@@ -5,12 +5,11 @@ type Rotation = { curr: number; next: number; dir: Direction; dist: number };
 const dirs: Record<Direction, number> = { L: -1, R: 1 } as const;
 
 const solve = (countFn: (r: Rotation) => number) => (input: string) =>
-  input
-    .matchAll(/^([LR])(\d+)$/gm)
+  Array.from(input.matchAll(/^([LR])(\d+)$/gm))
     .map((x) => ({ dir: x[1] as Direction, dist: +x[2]! }))
     .reduce(
       ({ curr, count }, { dir, dist }) => {
-        const next = (curr + dirs[dir] * dist) % 100;
+        const next = (((curr + dirs[dir] * dist) % 100) + 100) % 100;
         count += countFn({ curr, next, dir, dist });
         return { curr: next, count };
       },
@@ -20,7 +19,7 @@ const solve = (countFn: (r: Rotation) => number) => (input: string) =>
 export default {
   1: solve(({ next }) => Number(!next)),
   2: solve(({ curr, dir, dist }) => {
-    const delta = { L: 0, R: 100 }[dir] - curr * dirs[dir];
-    return Math.max(0, ~~((dist - delta + 99) / 100));
+    const delta = { L: 100 - curr, R: curr }[dir];
+    return Math.max(0, ~~((dist + (curr && delta)) / 100));
   }),
 } satisfies Day;

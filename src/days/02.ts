@@ -1,8 +1,7 @@
 import type { Day } from "../runner.ts";
 
 const solve = (pattern: RegExp) => (input: string) =>
-  input
-    .matchAll(/(\d+)-(\d+)/g)
+  Array.from(input.matchAll(/(\d+)-(\d+)/g))
     .flatMap(([, from, until]) => {
       const start = Number(from);
       const length = Number(until) - start + 1;
