@@ -18,7 +18,7 @@ const solve = (countFn: (r: Rotation) => number) => (input: string) =>
     ).count;
 
 export default {
-  1: solve(({ next }) => +!next),
+  1: solve(({ next }) => Number(!next)),
   2: solve(({ curr, dir, dist }) => {
     const delta = { L: 0, R: 100 }[dir] - curr * dirs[dir];
     return Math.max(0, ~~((dist - delta + 99) / 100));
