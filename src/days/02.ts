@@ -1,6 +1,6 @@
 import type { Day } from "../runner.ts";
 
-const solve = (input: string, pattern: RegExp) =>
+const solve = (pattern: RegExp) => (input: string) =>
   input
     .matchAll(/(\d+)-(\d+)/g)
     .flatMap(([, from, until]) => {
@@ -12,6 +12,6 @@ const solve = (input: string, pattern: RegExp) =>
     .reduce((sum, id) => sum + id, 0);
 
 export default {
-  1: (input: string) => solve(input, /^(\d+)\1$/),
-  2: (input: string) => solve(input, /^(\d+)\1+$/),
+  1: solve(/^(\d+)\1$/),
+  2: solve(/^(\d+)\1+$/),
 } satisfies Day;
