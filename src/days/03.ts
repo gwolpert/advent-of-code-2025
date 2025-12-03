@@ -12,9 +12,9 @@ const solve = (enabled: number) => (input: string) => {
     return [];
   };
 
-  const banks = input.split("\n").map((bank) => {
-    const battery = Array.from(bank).map(Number);
-    return Number(findBest(battery, enabled).join(""));
+  const banks = input.split("\n").map((line) => {
+    const bank = Array.from(line).map(Number);
+    return Number(findBest(bank, enabled).join(""));
   });
   return banks.reduce((total, joltage) => total + joltage, 0);
 };
