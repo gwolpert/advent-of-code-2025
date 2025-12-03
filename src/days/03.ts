@@ -4,10 +4,10 @@ const solve = (enabled: number) => (input: string) => {
   const findBest = (bank: number[], needed: number): number[] => {
     if (needed === 0) return [];
     for (let digit = 9; digit >= 0; digit--) {
-      const i = bank.findIndex((battery, position) => {
-        return battery === digit && bank.length - position >= needed;
-      });
-      if (~i) return [digit, ...findBest(bank.slice(i + 1), needed - 1)];
+      const findIndex = (battery: number, pos: number) =>
+        battery === digit && bank.length - pos >= needed;
+      const index = bank.findIndex(findIndex) + 1;
+      if (index) return [digit, ...findBest(bank.slice(index), --needed)];
     }
     return [];
   };
