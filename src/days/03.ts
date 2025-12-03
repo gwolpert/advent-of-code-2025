@@ -3,7 +3,8 @@ import type { Day } from "../runner.ts";
 const findBest = (bank: number[], needed: number): number[] => {
   if (needed === 0) return [];
   if (needed === bank.length) return bank;
-  for (let digit = 9; digit >= 0; digit--) {
+  const digits = Array.from(new Set(bank)).sort((a, b) => b - a);
+  for (const digit of digits) {
     const findIndex = (battery: number, pos: number) =>
       battery === digit && bank.length - pos >= needed;
     const index = bank.findIndex(findIndex) + 1;
