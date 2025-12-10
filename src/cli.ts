@@ -106,10 +106,7 @@ export const promptForParts = async (): Promise<Array<1 | 2>> => {
  * @param day Day number
  * @param explicitScaffold Whether --scaffold flag was provided
  */
-export const handleScaffolding = async (
-  day: number,
-  explicitScaffold?: boolean
-): Promise<void> => {
+export const handleScaffolding = async (day: number, explicitScaffold?: boolean): Promise<void> => {
   const dayStr = day.toString().padStart(2, "0");
   const dayPath = join(import.meta.dir, "days", `${dayStr}.ts`);
   const isDayScaffolded = await exists(dayPath);

@@ -3,8 +3,7 @@ import type { Day } from "../runner.ts";
 type Junction = readonly [number, number, number];
 type Connection = [distance: number, a: number, b: number];
 
-const distance = (a: Junction, b: Junction) =>
-  Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+const distance = (a: Junction, b: Junction) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
 export const parse = (input: string) => {
   const junctions = Array.from(input.matchAll(/(\d+),(\d+),(\d+)/g)).map(
@@ -31,9 +30,7 @@ export const parse = (input: string) => {
 export default {
   1: (input: string) => {
     const { circuitOf, connections, findRoot } = parse(input);
-    connections
-      .slice(0, 1000)
-      .forEach(([, a, b]) => (circuitOf[findRoot(a)] = findRoot(b)));
+    connections.slice(0, 1000).forEach(([, a, b]) => (circuitOf[findRoot(a)] = findRoot(b)));
     const sizes: Record<number, number> = {};
     circuitOf.forEach((_, i) => {
       const root = findRoot(i);

@@ -1,11 +1,7 @@
 import { executePart, importDay } from "../runner.ts";
 import { describe, test, expect } from "bun:test";
 describe(`Day ${3}`, async () => {
-  const input =
-    "987654321111111\n" +
-    "811111111111119\n" +
-    "234234234234278\n" +
-    "818181911112111";
+  const input = "987654321111111\n" + "811111111111119\n" + "234234234234278\n" + "818181911112111";
   const day = await importDay(3);
 
   test("Part 1", async () => {

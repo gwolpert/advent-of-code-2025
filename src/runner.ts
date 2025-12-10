@@ -22,11 +22,7 @@ export const importDay = async (day: number): Promise<Day> => {
  * @param input Puzzle input as a string
  * @returns Promise with puzzle answer as number
  */
-export const executePart = async (
-  title: string,
-  part: Part,
-  input: string
-): Promise<number> => {
+export const executePart = async (title: string, part: Part, input: string): Promise<number> => {
   const spinner = createSpinner(title).start();
   const startTime = performance.now();
   try {

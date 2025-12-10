@@ -12,9 +12,7 @@ const parse = (input: string) => {
 export default {
   1: (input: string) => {
     const { ranges, ids } = parse(input);
-    return ids.filter((id) =>
-      ranges.some(([from, to]) => id >= from && id <= to)
-    ).length;
+    return ids.filter((id) => ranges.some(([from, to]) => id >= from && id <= to)).length;
   },
   2: (input: string) => {
     const { ranges } = parse(input);

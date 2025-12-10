@@ -1,11 +1,6 @@
 import chalk from "chalk";
 const { cyan, green } = chalk;
-import {
-  getCliArgs,
-  promptForDay,
-  promptForParts,
-  handleScaffolding,
-} from "./cli";
+import { getCliArgs, promptForDay, promptForParts, handleScaffolding } from "./cli";
 import { fetchDayTitle, fetchInput } from "./aoc";
 import { importDay, executePart } from "./runner";
 import { loadConfig } from "./config.ts";

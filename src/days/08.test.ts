@@ -28,9 +28,7 @@ describe(`Day ${8}`, async () => {
     // Test uses 10 connections, actual uses 1000
     const { parse } = await import("./08.ts");
     const { circuitOf, connections, findRoot } = parse(input);
-    connections
-      .slice(0, 10)
-      .forEach(([, a, b]) => (circuitOf[findRoot(a)] = findRoot(b)));
+    connections.slice(0, 10).forEach(([, a, b]) => (circuitOf[findRoot(a)] = findRoot(b)));
     const sizes = new Map<number, number>();
     circuitOf.forEach((_, i) => {
       const root = findRoot(i);

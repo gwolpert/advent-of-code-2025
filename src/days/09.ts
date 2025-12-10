@@ -5,8 +5,7 @@ type Tile = [x: number, y: number];
 const parse = (input: string): Tile[] =>
   Array.from(input.matchAll(/(\d+),(\d+)/g)).map(([, x, y]) => [+x!, +y!]);
 
-const area = ([x1, y1]: Tile, [x2, y2]: Tile) =>
-  (Math.abs(x2 - x1) + 1) * (Math.abs(y2 - y1) + 1);
+const area = ([x1, y1]: Tile, [x2, y2]: Tile) => (Math.abs(x2 - x1) + 1) * (Math.abs(y2 - y1) + 1);
 
 const isInsidePolygon = ([x, y]: Tile, redTiles: Tile[]) => {
   let crossings = 0;
@@ -42,11 +41,7 @@ const isValid = (tile: Tile, redTiles: Tile[]) =>
   isOnBoundary(tile, redTiles) || isInsidePolygon(tile, redTiles);
 
 // Check if a boundary segment cuts through the rectangle interior
-const segmentCutsRect = (
-  [rx1, ry1]: Tile,
-  [rx2, ry2]: Tile,
-  redTiles: Tile[]
-) => {
+const segmentCutsRect = ([rx1, ry1]: Tile, [rx2, ry2]: Tile, redTiles: Tile[]) => {
   const [minX, maxX] = rx1 < rx2 ? [rx1, rx2] : [rx2, rx1];
   const [minY, maxY] = ry1 < ry2 ? [ry1, ry2] : [ry2, ry1];
 
@@ -71,8 +66,7 @@ const segmentCutsRect = (
 export default {
   1: (input: string) =>
     parse(input).reduce(
-      (max, a, i, tiles) =>
-        tiles.slice(i + 1).reduce((m, b) => Math.max(m, area(a, b)), max),
+      (max, a, i, tiles) => tiles.slice(i + 1).reduce((m, b) => Math.max(m, area(a, b)), max),
       0
     ),
   2: (input: string) => {
