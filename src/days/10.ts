@@ -27,41 +27,38 @@ const findXorPatterns = (target: number[], buttons: number[][]): number[][][] =>
   return results;
 };
 
-const solveLights = (target: number[], buttons: number[][]): number => {
-  const patterns = findXorPatterns(target, buttons);
-  return patterns.length ? Math.min(...patterns.map((p) => p.length)) : 0;
-};
-
-const solveJoltage = (joltages: number[], buttons: number[][]): number => {
-  const cache = new Map<string, number>();
-
-  const solve = (target: number[]): number => {
-    if (target.every((t) => t === 0)) return 0;
-    const key = target.join(",");
-    if (cache.has(key)) return cache.get(key)!;
-
-    const parity = target.map((t) => t & 1);
-    const patterns = findXorPatterns(parity, buttons);
-    let min = 1e9;
-
-    for (const pressed of patterns) {
-      const remaining = [...target];
-      for (const btn of pressed) btn.forEach((b) => remaining[b]!--);
-      if (remaining.some((r) => r < 0)) continue;
-      const half = remaining.map((r) => r >> 1);
-      min = Math.min(min, pressed.length + 2 * solve(half));
-    }
-
-    cache.set(key, min);
-    return min;
-  };
-
-  return solve(joltages);
-};
-
 export default {
   1: (input: string) =>
-    parse(input).reduce((s, { target, buttons }) => s + solveLights(target, buttons), 0),
+    parse(input).reduce((s, { target, buttons }) => {
+      const patterns = findXorPatterns(target, buttons);
+      if (!patterns.length) return s;
+      return s + Math.min(...patterns.map((p) => p.length));
+    }, 0),
   2: (input: string) =>
-    parse(input).reduce((s, { joltages, buttons }) => s + solveJoltage(joltages, buttons), 0),
+    parse(input).reduce((s, { joltages, buttons }) => {
+      const cache = new Map<string, number>();
+
+      const solve = (target: number[]): number => {
+        if (target.every((t) => !t)) return 0;
+        const key = target.join(",");
+        if (cache.has(key)) return cache.get(key)!;
+
+        const parity = target.map((t) => t & 1);
+        const patterns = findXorPatterns(parity, buttons);
+        let min = Infinity;
+
+        for (const pressed of patterns) {
+          const remaining = [...target];
+          for (const btn of pressed) btn.forEach((b) => remaining[b]!--);
+          if (remaining.some((r) => r < 0)) continue;
+          const half = remaining.map((r) => r >> 1);
+          min = Math.min(min, pressed.length + 2 * solve(half));
+        }
+
+        cache.set(key, min);
+        return min;
+      };
+
+      return s + solve(joltages);
+    }, 0),
 } satisfies Day;
