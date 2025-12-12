@@ -12,85 +12,51 @@ const parse = (input: string): Machine[] =>
       .map(Number),
   }));
 
-const gaussElim = (target: number[], buttons: number[][], gf2 = false) => {
-  const [n, m] = [target.length, buttons.length];
-  const matrix = target.map((t, i) => [...buttons.map((b) => +b.includes(i)), t]);
-  const [pivotCols, freeCols]: [number[], number[]] = [[], []];
-  let pivotRow = 0;
-
-  for (let col = 0; col < m; col++) {
-    const pivot = matrix.slice(pivotRow).findIndex((row) => row[col]) + pivotRow;
-    if (pivot < pivotRow) {
-      freeCols.push(col);
-      continue;
+const findXorPatterns = (target: number[], buttons: number[][]): number[][][] => {
+  const n = buttons.length;
+  const results: number[][][] = [];
+  for (let mask = 0; mask < 1 << n; mask++) {
+    const state = Array(target.length).fill(0);
+    for (let i = 0; i < n; i++) {
+      if (mask & (1 << i)) buttons[i]!.forEach((b) => (state[b] ^= 1));
     }
-    [matrix[pivotRow], matrix[pivot]] = [matrix[pivot]!, matrix[pivotRow]!];
-    pivotCols.push(col);
-    const pVal = matrix[pivotRow]![col]!;
-    for (let row = 0; row < n; row++) {
-      if (row !== pivotRow && matrix[row]![col]) {
-        const f = matrix[row]![col]! / pVal;
-        for (let c = 0; c <= m; c++)
-          matrix[row]![c] = gf2
-            ? matrix[row]![c]! ^ matrix[pivotRow]![c]!
-            : matrix[row]![c]! - f * matrix[pivotRow]![c]!;
-      }
+    if (state.every((s, i) => s === target[i])) {
+      results.push(buttons.filter((_, i) => mask & (1 << i)));
     }
-    pivotRow++;
   }
-  return { matrix, pivotCols, freeCols, pivotRow, n, m };
+  return results;
 };
 
 const solveLights = (target: number[], buttons: number[][]): number => {
-  const { matrix, pivotCols, freeCols, pivotRow, n, m } = gaussElim(target, buttons, true);
-  if (matrix.slice(pivotRow, n).some((row) => row[m])) return 0;
-
-  let min = Infinity;
-  for (let fv = 0; fv < 1 << freeCols.length; fv++) {
-    const sol = Array(m).fill(0);
-    freeCols.forEach((c, i) => (sol[c] = (fv >> i) & 1));
-    for (let i = pivotCols.length - 1; i >= 0; i--) {
-      const c = pivotCols[i]!;
-      const rhs = matrix[i]![m]!;
-      const xor = matrix[i]!.slice(c + 1, m).reduce((v, x, j) => v ^ (x ? sol[c + 1 + j] : 0), 0);
-      sol[c] = rhs ^ xor;
-    }
-    min = Math.min(
-      min,
-      sol.reduce((a, b) => a + b)
-    );
-  }
-  return min === Infinity ? 0 : min;
+  const patterns = findXorPatterns(target, buttons);
+  return patterns.length ? Math.min(...patterns.map((p) => p.length)) : 0;
 };
 
-const solveJoltage = (target: number[], buttons: number[][]): number => {
-  const { matrix, pivotCols, freeCols, m } = gaussElim(target, buttons);
-  const maxFree = Math.max(...target) + 1;
-  let min = Infinity;
+const solveJoltage = (joltages: number[], buttons: number[][]): number => {
+  const cache = new Map<string, number>();
 
-  const search = (idx: number, sol: number[]): void => {
-    if (idx === freeCols.length) {
-      const full = [...sol];
-      for (let i = pivotCols.length - 1; i >= 0; i--) {
-        const c = pivotCols[i]!;
-        const rhs = matrix[i]![m]!;
-        const sum = matrix[i]!.slice(c + 1, m).reduce((v, x, j) => v + x * full[c + 1 + j]!, 0);
-        full[c] = (rhs - sum) / matrix[i]![c]!;
-      }
-      if (full.every((x) => x >= 0 && Number.isInteger(x)))
-        min = Math.min(
-          min,
-          full.reduce((a, b) => a + b)
-        );
-      return;
+  const solve = (target: number[]): number => {
+    if (target.every((t) => t === 0)) return 0;
+    const key = target.join(",");
+    if (cache.has(key)) return cache.get(key)!;
+
+    const parity = target.map((t) => t & 1);
+    const patterns = findXorPatterns(parity, buttons);
+    let min = 1e9;
+
+    for (const pressed of patterns) {
+      const remaining = [...target];
+      for (const btn of pressed) btn.forEach((b) => remaining[b]!--);
+      if (remaining.some((r) => r < 0)) continue;
+      const half = remaining.map((r) => r >> 1);
+      min = Math.min(min, pressed.length + 2 * solve(half));
     }
-    for (let v = 0; v <= maxFree && v < min; v++) {
-      sol[freeCols[idx]!] = v;
-      search(idx + 1, sol);
-    }
+
+    cache.set(key, min);
+    return min;
   };
-  search(0, Array(m).fill(0));
-  return min === Infinity ? 0 : min;
+
+  return solve(joltages);
 };
 
 export default {
